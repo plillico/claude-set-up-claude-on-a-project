@@ -10,11 +10,11 @@ Express 4 JSON API over an in-memory store — no database, no build step.
 
 ## Conventions
 
-- CommonJS only (`require` / `module.exports`). `.eslintrc.json` parses as `script`, so ESM `import` fails lint.
-- One router per resource in `routes/`, mounted in `server.js`. Add a new file there rather than a handler in `server.js`.
-- Routes read and write data only through `db/store.js` — no module-level state in `routes/`.
-- Validate input in the route and return a JSON `{ error: "..." }` with 400 or 404; don't throw.
-- Tests import `app` from `server.js` and drive it with supertest — never open a real port in a test.
+- Use CommonJS `require` / `module.exports`, not ESM `import` — `.eslintrc.json` parses as `script`, so an `import` fails lint, and CI lints before it tests.
+- Use one router file per resource in `routes/` mounted in `server.js`, not an inline handler added to `server.js`.
+- Use `db/store.js` for every read and write, not module-level state in `routes/`.
+- Use a JSON `{ error: "..." }` response with 400 or 404 for bad input or a missing record, not a thrown error.
+- Use supertest against the `app` exported from `server.js` in tests, not a real listening port.
 
 ## Architecture
 
